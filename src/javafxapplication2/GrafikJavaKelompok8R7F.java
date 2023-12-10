@@ -3,6 +3,7 @@ package javafxapplication2;
 
 import java.util.Scanner;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -53,19 +54,9 @@ public class GrafikJavaKelompok8R7F extends Application {
         String inputMaxP = JOptionPane.showInputDialog(null, "Masukkan nilai kebutuhan maksimum pengajar");
         int MaxP = Integer.parseInt(inputMaxP); // Input kendala 2 (kebutuhan maksimum pengajar)
         
+       
         
-        for (int XVal = 0; XVal <= MaxR; XVal++) {
-            for (int YVal = 0; YVal <= MaxR; YVal++) {
-                if (XVal + YVal <= MaxP) {
-                    Z = (XVal * PX) + (YVal * PY);
-                    if (Z > ZMax) {
-                        ZMax = Z;
-                        XOpt = XVal;
-                        YOpt = YVal;
-                    }
-                }
-            }
-        }
+        
         System.out.println("Kendala non negatif -> X ≥ " + XOpt + ", Y ≥ " + YOpt);
         System.out.println("Kendala 1 -> X ≤ " + MaxR + ", Y ≤ " + MaxR);
         System.out.println("Kendala 2 -> X + Y ≤ " + MaxP);
@@ -93,28 +84,35 @@ public class GrafikJavaKelompok8R7F extends Application {
             y = MaxR;
         System.out.println("Titik koordinat kedua: (" + x + "," + y + ")");
 
-        x = 0;
-        y = 0;
-        if (x == 0)
+        int XTemp = 0;
+        int YTemp = 0;
+        if (XTemp == 0)
             y = MaxP;
-        else if (y == 0)
+        
+        if (YTemp == 0)
             x = MaxP;
+        
         System.out.println("Titik koordinat ketiga: (" + x + "," + y + ")");
-
+        
+         
+         XOpt = 0;
+         YOpt = 0;
+         ZMax = 0;
+         int xTemp = 0;
+         int yTemp = 0;
         // Menentukan laba/pendapatan maksimum dan solusi optimal
-        int ZValue = 0;
-        while ((x + y <= R) && (x + y <= P)) {
-            ZValue = PX * x + PY * y;
+         while ((xTemp <= R) && (xTemp + yTemp <= P)) {
+            int ZValue = PX * xTemp + PY * yTemp;
             if (ZValue > ZMax) {
                 ZMax = ZValue;
-                XOpt = x;
-                YOpt = y;
+                XOpt = xTemp;
+                YOpt = yTemp;
             }
 
             if (PX > PY)
-                x = x + 1;
+                xTemp = xTemp + 1;
             else
-                y = y + 1;
+                yTemp = yTemp + 1;
         }
 
         System.out.println("Solusi optimal: " + XOpt + " kelas " + X + " dan " + YOpt + " kelas " + Y + ".");
