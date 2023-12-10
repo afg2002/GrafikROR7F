@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMain.java to edit this template
- */
+
 package javafxapplication2;
 
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,43 +9,54 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author afghanep
- */
+
 public class GrafikJavaKelompok8R7F extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        
         // Langkah 1: Definisi variabel
         String X = "matematika";
         String Y = "bahasa";
        
-        int Z = 0; // Pendapatan
+        int Z = 0; // Pendapatan 
         
         int ZMax = 0; // Pendapatan maksimal
         int NKel = 0; // Non-negatif kelas
 
         // Langkah 2: Perumusan fungsi tujuan
-        int PX = 1000; // Pendapatan matematika
-        int PY = 800; // Pendapatan bahasa
+        String inputPX = JOptionPane.showInputDialog(null, "Masukkan pendapatan per kelas matematika :");
+        int PX = Integer.parseInt(inputPX); // Pendapatan matematika
+        String inputPY = JOptionPane.showInputDialog(null, "Masukkan pendapatan per kelas bahasa :");
+        int PY = Integer.parseInt(inputPY); // Pendapatan bahasa
         System.out.println("Z = " + PX + "X + " + PY + "Y");
 
         // Langkah 3: Perumusan fungsi kendala
         
 //      input kendala non negatif
-        int XOpt = 0; // Jumlah optimal kelas matematika
-        int YOpt = 0; // Jumlah optimal kelas bahasa
-        int MaxR = 3; // Input kendala 1 (kebutuhan maksimum ruang kelas)
-        int MaxT = 5; // Input kendala 2 (kebutuhan maksimum pengajar)
+        // Menggunakan dialog input untuk meminta nilai XOpt
+        String inputXOpt = JOptionPane.showInputDialog(null, "Masukkan Kendala Non Negatif (X) : ");
+        int XOpt = Integer.parseInt(inputXOpt);
 
+        // Menggunakan dialog input untuk meminta nilai YOpt
+        String inputYOpt = JOptionPane.showInputDialog(null, "Masukkan Kendala Non Negatif (Y) : ");
+        int YOpt = Integer.parseInt(inputYOpt);
+        
+        // Menggunakan dialog input untuk meminta nilai MaxR
+        String inputMaxR = JOptionPane.showInputDialog(null, "Masukkan nilai kebutuhan maksimum ruang kelas:");
+        int MaxR = Integer.parseInt(inputMaxR);  // Input kendala 1 (kebutuhan maksimum ruang kelas)
+
+        // Menggunakan dialog input untuk meminta nilai MaxP
+        String inputMaxP = JOptionPane.showInputDialog(null, "Masukkan nilai kebutuhan maksimum pengajar");
+        int MaxP = Integer.parseInt(inputMaxP); // Input kendala 2 (kebutuhan maksimum pengajar)
+        
+        
         for (int XVal = 0; XVal <= MaxR; XVal++) {
             for (int YVal = 0; YVal <= MaxR; YVal++) {
-                if (XVal + YVal <= MaxT) {
+                if (XVal + YVal <= MaxP) {
                     Z = (XVal * PX) + (YVal * PY);
                     if (Z > ZMax) {
                         ZMax = Z;
@@ -59,51 +68,53 @@ public class GrafikJavaKelompok8R7F extends Application {
         }
         System.out.println("Kendala non negatif -> X ≥ " + XOpt + ", Y ≥ " + YOpt);
         System.out.println("Kendala 1 -> X ≤ " + MaxR + ", Y ≤ " + MaxR);
-        System.out.println("Kendala 2 -> X + Y ≤ " + MaxT);
+        System.out.println("Kendala 2 -> X + Y ≤ " + MaxP);
 
         // Langkah 4: Membuat grafik
-        int R = 3; // Jumlah ruang kelas
-        int P = 5; // Jumlah pengajar
+        String inputRuangKelas = JOptionPane.showInputDialog(null, "Masukkan jumlah ruang kelas (R) : ");
+        int R = Integer.parseInt(inputRuangKelas); // Jumlah ruang kelas
+        String inputPengajar = JOptionPane.showInputDialog(null, "Masukkan jumlah pengajar (P) : ");
+        int P = Integer.parseInt(inputPengajar); // Jumlah pengajar
 
         // Menentukan titik optimal
-        int x = 0;
-        int y = 0;
+        int x = R;
+        int y = P;
         if (x >= 0 && y >= 0) {
             System.out.println("Kedua variabel memenuhi kondisi x ≥ 0 dan y ≥ 0.");
         } else {
             System.out.println("Salah satu atau kedua variabel tidak memenuhi kondisi.");
         }
 
-        x = 3;
-        y = 3;
+        x = R;
+        y = R;
         if (x <= MaxR)
             x = MaxR;
         if (y <= MaxR)
             y = MaxR;
         System.out.println("Titik koordinat kedua: (" + x + "," + y + ")");
 
-        int XVal = 0;
-        int YVal = 0;
-        if (XVal == 0)
-            YVal = MaxT;
-        else if (YVal == 0)
-            XVal = MaxT;
-        System.out.println("Titik koordinat ketiga: (" + XVal + "," + YVal + ")");
+        x = 0;
+        y = 0;
+        if (x == 0)
+            y = MaxP;
+        else if (y == 0)
+            x = MaxP;
+        System.out.println("Titik koordinat ketiga: (" + x + "," + y + ")");
 
         // Menentukan laba/pendapatan maksimum dan solusi optimal
         int ZValue = 0;
-        while ((XVal + YVal <= R) && (XVal + YVal <= P)) {
-            ZValue = PX * XVal + PY * YVal;
+        while ((x + y <= R) && (x + y <= P)) {
+            ZValue = PX * x + PY * y;
             if (ZValue > ZMax) {
                 ZMax = ZValue;
-                XOpt = XVal;
-                YOpt = YVal;
+                XOpt = x;
+                YOpt = y;
             }
 
             if (PX > PY)
-                XVal = XVal + 1;
+                x = x + 1;
             else
-                YVal = YVal + 1;
+                y = y + 1;
         }
 
         System.out.println("Solusi optimal: " + XOpt + " kelas " + X + " dan " + YOpt + " kelas " + Y + ".");
@@ -126,8 +137,8 @@ public class GrafikJavaKelompok8R7F extends Application {
         line1.getData().add(new XYChart.Data(0,MaxR));
         
         XYChart.Series line2 = new XYChart.Series();
-        line2.getData().add(new XYChart.Data(MaxT,0));
-        line2.getData().add(new XYChart.Data(0,MaxT));
+        line2.getData().add(new XYChart.Data(MaxP,0));
+        line2.getData().add(new XYChart.Data(0,MaxP));
         
         
        
@@ -136,7 +147,7 @@ public class GrafikJavaKelompok8R7F extends Application {
         lineChart.getData().add(series);
         lineChart.getData().add(line1);
         lineChart.getData().add(line2);
-        
+            
         primaryStage.setScene(scene);
         primaryStage.show();
     }
